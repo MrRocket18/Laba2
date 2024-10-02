@@ -271,7 +271,7 @@ if ((det > sum_diagonals_F) & (det!=0)):
 
     result=np.subtract(A_minus_degree_multiply_by_A_T,K_multiply_by_F_T)
     print_mat(result,"Результат вычисления A**-1 * A**T - K * F**T ")
-elif det!=0:
+elif ((int(np.linalg.det(F))!=0)) & ((det < sum_diagonals_F)):
     A_T=np.transpose(A)
     print_mat(A_T,"A**T")
 
