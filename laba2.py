@@ -2,22 +2,14 @@ import random
 import numpy as np
 import matplotlib.pyplot as plt
 
-def show_graf(labels,values,colors):
-    plt.figure(figsize=(12, 9))
-    plt.title('The percentage of positive, negative and zero numbers in matrix F',color='blue',fontsize=20, fontname='Times New Roman')
-    plt.pie(values,labels=labels,colors=colors,autopct='%1.1f%%',startangle=180)
-    plt.axis('equal')
-    plt.show()
-
 def print_mat(n,mat_name):
     print("Матрица "+mat_name)
     for i in n:
         for j in i:
             print(j, end=' ')
         print()
-v1=[]
-v2=[]
-A,F,A_F,F_t,result=[],[],[],[],[]
+
+#A,F,A_F,F_t,result=[],[],[],[],[]
 
 n=int(input("Введите количество строк(столбцов) квадратной матрицы в интервале от 2 до 100.\nВаш выбор:"))
 
@@ -33,18 +25,14 @@ if n%2!=0:
 
 K=int(input("Введите число K.\nВаш выбор:"))
 
-for i in range(n):
-    A.append([0]*n)
-    F.append([0]*n)
-    F_t.append([0]*n)
-    A_F.append([0]*n)
+A=np.zeros((n,n))
 
 metod=int(input("Введите число(метод), который хотите использовать:\n1-рандомный\n2-файловый\n3-генератор\nВаш выбор:"))
 while metod < 1 or metod >3:
     metod=int(input("Вы ввели неверное число\nВведите число(метод), который хотите использовать:1-рандомный, 2-файловый, 3-генератор"))
 
 if metod==1:
-    A = [[random.randint(-10,10) for i in range(n) ] for j in range(n)]
+    A  = np.random.randint(-10,10, size=(n,n))
 
 elif metod==2:
     file=open("matr2.txt","r")
@@ -69,21 +57,9 @@ else:
 
 print_mat(A,"A")
 
-for i in range(n): #Копирование Матрицы А в матрицу F
-    for j in range(n):
-        F[i][j]=A[i][j]
+F=np.copy(A)
 
 print_mat(F,"F")
-
-plt.figure(figsize=(12, 9))
-plt.matshow(F,fignum=1)
-plt.title('The matrix F(after copy matrix A)', fontsize=20, fontname='Times New Roman')
-plt.xlabel('Columns', color='blue',fontsize=20, fontname='Times New Roman')
-plt.ylabel('Lines',color='blue',fontsize=20, fontname='Times New Roman')
-for i in range(n):
-    for j in range(n):
-        plt.text(j,i,str(F[i][j]),fontsize=12, fontname='Times New Roman',color='red')
-plt.show()
 
 plt.figure(figsize=(12, 9))
 plt.axis([-10,10,0,n*n])
@@ -105,11 +81,10 @@ for k in range(-10,11):
     count_number=0
 plt.xticks(x, x)
 plt.yticks(y, y)
+plt.grid(True)
 plt.show()
 
-count_positive_in_F=0
-count_negative_in_F=0
-count_zero_in_F=0
+count_positive_in_F,count_negative_in_F,count_zero_in_F,count_even_numbers_in_F,count_odd_numbers_in_F=0,0,0,0,0
 
 for i in range(n):
     for j in range(n):
@@ -119,49 +94,35 @@ for i in range(n):
             count_negative_in_F+=1
         else:
             count_zero_in_F+=1
-if count_negative_in_F==0:
-    if count_zero_in_F==0:
-        labels = ['Positive']
-        values = [count_positive_in_F]
-        colors = ['green']
-        show_graf(labels,values,colors)
-    else:
-        labels = ['Positive','Zero']
-        values = [count_positive_in_F,count_zero_in_F]
-        colors = ['green','gray']
-        show_graf(labels,values,colors)
-elif count_zero_in_F==0:
-    if count_negative_in_F==0:
-        labels = ['Positive']
-        values = [count_positive_in_F]
-        colors = ['green']
-        show_graf(labels,values,colors)
-    elif count_positive_in_F==0:
-        labels = ['Negative']
-        values = [count_negative_in_F]
-        colors = ['red']
-        show_graf(labels,values,colors)
-    else:
-        labels = ['Positive','Negative']
-        values = [count_positive_in_F,count_negative_in_F]
-        colors = ['green','red']
-        show_graf(labels,values,colors)
-elif count_positive_in_F==0:
-    if count_zero_in_F==0:
-        labels = ['Negative']
-        values = [count_negative_in_F]
-        colors = ['red']
-        show_graf(labels,values,colors)
-    else:
-        labels = ['Negative','Zero']
-        values = [count_negative_in_F,count_zero_in_F]
-        colors = ['red','gray']
-        show_graf(labels,values,colors)
-else:
-    labels = ['Positive','Negative','Zero']
-    values = [count_positive_in_F,count_negative_in_F,count_zero_in_F]
-    colors = ['green','red','gray']
-    show_graf(labels,values,colors)
+        if F[i][j]%2==0:
+            count_even_numbers_in_F+=1
+        else:
+            count_odd_numbers_in_F+=1
+
+print(count_even_numbers_in_F,count_odd_numbers_in_F)
+
+plt.figure(figsize=(10, 8))
+type_of_numbers = ["Zero", "Positive", "Negative"]
+counts_type_of_numbers = [count_zero_in_F,count_positive_in_F,count_negative_in_F]
+plt.bar(type_of_numbers, counts_type_of_numbers)
+plt.grid(axis='y')
+plt.title("Type of numbers!",color='blue',fontsize=20, fontname='Times New Roman')
+plt.xlabel("Type",color='blue',fontsize=20, fontname='Times New Roman')
+plt.ylabel("Count",color='blue',fontsize=20, fontname='Times New Roman')
+plt.show()
+
+plt.figure(figsize=(10, 8))
+x=[1,2]
+plt.axis([0.5,2.5,0,n*n])
+type_of_numbers_odd_and_even = ["Odd","Even" ]
+counts_of_even_and_odd_numbers = [count_odd_numbers_in_F,count_even_numbers_in_F ]
+plt.stem(x,counts_of_even_and_odd_numbers)
+plt.xticks(x,type_of_numbers_odd_and_even)
+plt.grid(axis='y')
+plt.title("Type of numbers!",color='blue',fontsize=20, fontname='Times New Roman')
+plt.xlabel("Type",color='blue',fontsize=20, fontname='Times New Roman')
+plt.ylabel("Count",color='blue',fontsize=20, fontname='Times New Roman')
+plt.show()
 
 count_0_in_odd_columns_in_B=0
 
@@ -178,6 +139,8 @@ for i in range(1,mid,2):
         sum_in_even_lines_in_B+=F[i][j]
 print("Сумма в четных строках подматрицы B = ", sum_in_even_lines_in_B)
 
+v1=[]
+v2=[]
 if count_0_in_odd_columns_in_B > sum_in_even_lines_in_B:
     for i in range(mid):
         for j in range(mid):
@@ -197,16 +160,6 @@ if count_0_in_odd_columns_in_B > sum_in_even_lines_in_B:
         b=F[v1[i][0]][v1[i][1]]
         F[v1[i][0]][v1[i][1]]=F[v2[i][0]][v2[i][1]]
         F[v2[i][0]][v2[i][1]]=b
-
-    plt.figure(figsize=(12, 9))
-    plt.matshow(F,fignum=1)
-    plt.title('The matrix F(after swap zone B and С symmetrical)', fontsize=20, fontname='Times New Roman')
-    plt.xlabel('Columns', color='blue',fontsize=20, fontname='Times New Roman')
-    plt.ylabel('Lines',color='blue',fontsize=20, fontname='Times New Roman')
-    for i in range(n):
-        for j in range(n):
-            plt.text(j,i,str(F[i][j]),fontsize=12, fontname='Times New Roman',color='red')
-    plt.show()
 
 else:
     for i in range(mid):
@@ -228,15 +181,6 @@ else:
         F[v1[i][0]][v1[i][1]]=F[v2[i][0]][v2[i][1]]
         F[v2[i][0]][v2[i][1]]=b
 
-    plt.figure(figsize=(12, 9))
-    plt.matshow(F,fignum=1)
-    plt.title('The matrix F(after swap zone B and E Not symmetrical)', fontsize=20, fontname='Times New Roman')
-    plt.xlabel('Columns', color='blue',fontsize=20, fontname='Times New Roman')
-    plt.ylabel('Lines',color='blue',fontsize=20, fontname='Times New Roman')
-    for i in range(n):
-        for j in range(n):
-            plt.text(j,i,str(F[i][j]),fontsize=12, fontname='Times New Roman',color='red')
-    plt.show()
 print_mat(F,"F изменённая")
 
 det = int(np.linalg.det(A))
@@ -255,7 +199,6 @@ print("Сумма диагоналей матрицы F = ", sum_diagonals_F)
 if ((det > sum_diagonals_F) & (det!=0)):
     A_minus_degree = np.linalg.inv(A)
     print_mat(A_minus_degree,"A**-1")
-    print_mat(A,"A")
 
     A_T=np.transpose(A)
     print_mat(A_T,"A**T")
@@ -289,6 +232,7 @@ elif ((int(np.linalg.det(F))!=0)) & ((det < sum_diagonals_F)):
 
     result=np.dot(A_T_add_G_minus_F_minus_degree,K)
     print_mat(result,"Результат вычисления (A**T + G - F**-1)*K  ")
+
 else: 
     print("Невозможно произвести вычисления т.к определитель равен 0")
 
