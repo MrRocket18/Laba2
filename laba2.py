@@ -142,44 +142,14 @@ print("Сумма в четных строках подматрицы B = ", sum
 v1=[]
 v2=[]
 if count_0_in_odd_columns_in_B > sum_in_even_lines_in_B:
-    for i in range(mid):
+   for i in range(mid):
         for j in range(mid):
-                v=[]
-                v.append(i)
-                v.append(j)
-                v1.append(v)
-    #print(v1)
-    for i in range(n-1,mid-1+additional_condition,-1):        
-        for j in range(mid):
-                v=[]
-                v.append(i)
-                v.append(j)
-                v2.append(v)
-    #print(v2)
-    for i in range(len (v1)):
-        b=F[v1[i][0]][v1[i][1]]
-        F[v1[i][0]][v1[i][1]]=F[v2[i][0]][v2[i][1]]
-        F[v2[i][0]][v2[i][1]]=b
+            F[n-i-1][j],F[i][j]=F[i][j],F[n-i-1][j]
 
 else:
     for i in range(mid):
         for j in range(mid):
-                v=[]
-                v.append(i)
-                v.append(j)
-                v1.append(v)
-    #print(v1)
-    for i in range(mid-1,-1,-1):        
-        for j in range(n-1,mid-1+additional_condition,-1):
-                v=[]
-                v.append(i)
-                v.append(j)
-                v2.append(v)
-    #print(v2)
-    for i in range(len (v1)):
-        b=F[v1[i][0]][v1[i][1]]
-        F[v1[i][0]][v1[i][1]]=F[v2[i][0]][v2[i][1]]
-        F[v2[i][0]][v2[i][1]]=b
+            F[mid-1-i][n-1-j],F[i][j]=F[i][j],F[mid-1-i][n-1-j]
 
 print_mat(F,"F изменённая")
 
